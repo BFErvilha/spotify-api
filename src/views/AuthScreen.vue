@@ -18,7 +18,7 @@ export default defineComponent({
 			const refreshToken = route.query.refresh_token
 			if (accessToken && refreshToken) {
 				store.dispatch('spotify/saveTokens', { accessToken, refreshToken })
-				sessionStorage.setItem('tokenSpotify', accessToken as string)
+				localStorage.setItem('tokenSpotify', accessToken as string)
 				router.push({ name: 'home' })
 			} else {
 				alert('Tokens não fornecidos')

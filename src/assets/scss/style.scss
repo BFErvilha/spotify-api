@@ -2,13 +2,18 @@
 @import "grid";
 @import "mixins";
 
-
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,700;1,9..40,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+
 
 body {
   font-family: 'Rubik', sans-serif;
   color: $white;
   background-color: $black;
+}
+
+a{
+  text-decoration: none;
 }
 
 .container {
@@ -64,4 +69,41 @@ body {
   line-height: 20px;
   letter-spacing: 0.01em;
   text-align: center;
+}
+
+.app-container {
+  display: flex;
+  width: 100%;
+}
+
+.sidenav {
+  width: 250px; 
+  transition: width 0.3s ease;
+
+  @include respond-to(mobile) {
+    width: 0; 
+  }
+
+  &.collapsed {
+    width: 0; 
+  }
+}
+
+.main-content {
+  flex-grow: 1;
+  transition: margin-left 0.3s ease;
+
+  @include respond-to(mobile) {
+    margin-left: 0; 
+  }
+
+  .sidenav:not(.collapsed)+& {
+    margin-left: 250px;
+  }
+}
+
+.sidebar-menu {
+  .sidebar-link {
+    font-family: DM Sans;
+  }
 }
