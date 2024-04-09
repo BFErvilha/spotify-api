@@ -1,5 +1,6 @@
 @import "variables";
 @import "grid";
+@import "mixins";
 
 
 @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
@@ -8,6 +9,23 @@ body {
   font-family: 'Rubik', sans-serif;
   color: $white;
   background-color: $black;
+}
+
+.container {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+
+  @include respond-to(mobile) {
+    padding-right: 0px;
+    padding-left: 0px;
+  }
+
+  @include respond-to(tablet) {
+    padding-right: 0px;
+    padding-left: 0px;
+  }
 }
 
 .d-flex{

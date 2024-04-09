@@ -50,6 +50,7 @@ export default defineComponent({
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
+		text-align: center;
 
 		p {
 			font-family: Rubik;
@@ -57,7 +58,7 @@ export default defineComponent({
 			font-weight: 500;
 			line-height: 20px;
 			letter-spacing: 0.01em;
-			text-align: left;
+			text-align: center;
 		}
 	}
 }
