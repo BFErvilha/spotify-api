@@ -1,0 +1,49 @@
+@import "variables";
+@import "grid";
+
+
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+
+body {
+  font-family: 'Rubik', sans-serif;
+  color: $white;
+  background-color: $black;
+}
+
+.d-flex{
+  display: flex;
+}
+
+.align-center{
+  align-items: center;
+}
+
+.justify-center{
+  justify-content: center;
+}
+
+.btn{
+  width: 133px;
+  height: 42px;
+  padding: 0px 40px 0px 40px;
+  gap: 10px;
+  border-radius: 24px;
+  opacity: 0px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary{ 
+  background-color: $green;
+
+  &:hover{
+    background-color:darken($green, 10%);
+  }
+
+  color: $black;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
+  letter-spacing: 0.01em;
+  text-align: center;
+}
