@@ -1,18 +1,32 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
-  </div>
+	<div>{{ userData }}</div>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+import { defineComponent, onMounted, ref } from 'vue'
+import { getUserData } from '@/services/user.services'
+import { useStore } from 'vuex'
 
-@Options({
-  components: {
-    HelloWorld,
-  },
+export default defineComponent({
+	name: 'HomeView',
+
+	setup() {
+		const store = useStore()
+		const userData = ref({} as any | null)
+		const loadUserData = async () => {
+			try {
+				const response = await getUserData()
+				store.dispatch('spotify/saveUser', response.data)
+				userData.value = response.data
+			} catch (error) {
+				console.error('Falha ao carregar os dados do usuário:', error)
+			}
+		}
+
+		onMounted(loadUserData)
+		return {
+			userData,
+		}
+	},
 })
-export default class HomeView extends Vue {}
 </script>

@@ -4,13 +4,13 @@
 			<logo />
 			<p>Entra com sua conta Spotify clicando no botão abaixo</p>
 			<button class="btn btn-primary" @click="login">Entrar</button>
+			<div v-if="loading">Carregando...</div>
 		</div>
 	</div>
 </template>
 <script lang="ts">
 import { loginSpotify } from '@/services/auth.services'
 import { defineComponent, ref } from 'vue'
-import { useStore } from 'vuex'
 import logo from '@/components/spotify/logo.vue'
 
 export default defineComponent({
@@ -19,21 +19,22 @@ export default defineComponent({
 		logo,
 	},
 	setup() {
-		const store = useStore()
-		const userToken = ref({})
-		async function login() {
+		const loading = ref(false)
+
+		const login = async () => {
+			loading.value = true
 			try {
-				const token = await loginSpotify()
-				store.dispatch('spotify/setAccessToken', token)
-				userToken.value = token
+				await loginSpotify()
 			} catch (error) {
 				console.error('Erro ao fazer login:', error)
+				alert('Erro ao fazer login. Por favor, tente novamente.')
+				loading.value = false
 			}
 		}
 
 		return {
+			loading,
 			login,
-			userToken,
 		}
 	},
 })

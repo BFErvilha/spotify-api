@@ -9,25 +9,29 @@ $breakpoints: (
 // Mixin media queries
 @mixin respond-to($device) {
   @if $device ==mobile {
-    @media (max-width: map-get($breakpoints, sm) - 1) {
+    @media (max-width: (map-get($breakpoints, sm) - 1)) {
       @content;
     }
   }
+
   @else if $device ==tablet {
-    @media (min-width: map-get($breakpoints, sm)) and (max-width: map-get($breakpoints, md) - 1) {
+    @media (min-width: map-get($breakpoints, sm)) and (max-width: (map-get($breakpoints, md) - 1)) {
       @content;
     }
   }
+
   @else if $device ==laptop {
-    @media (min-width: map-get($breakpoints, md)) and (max-width: map-get($breakpoints, lg) - 1) {
+    @media (min-width: map-get($breakpoints, md)) and (max-width: (map-get($breakpoints, lg) - 1)) {
       @content;
     }
   }
+
   @else if $device ==desktop {
     @media (min-width: map-get($breakpoints, lg)) {
       @content;
     }
   }
+
   @else {
     @warn "Dispositivo não suportado: #{$device}. Use 'mobile', 'tablet', 'laptop', ou 'desktop'.";
   }

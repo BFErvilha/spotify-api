@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-import spotifyModule from './modules/spotify'
+import { spotify } from './modules/spotify'
 
 export default createStore({
 	state: {},
@@ -8,6 +8,6 @@ export default createStore({
 	actions: {},
 
 	modules: {
-		spotify: spotifyModule,
+		spotify: spotify,
 	},
 })
