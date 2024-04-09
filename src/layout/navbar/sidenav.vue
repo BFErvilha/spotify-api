@@ -7,8 +7,8 @@
 		<div class="sidebar-content">
 			<ul class="sidebar-menu">
 				<li v-for="(item, index) in menu" :key="index">
-					<router-link :to="item.url" class="sidebar-link">
-						<menu-icons :icon="item.icon" />
+					<router-link :to="item.url" class="sidebar-link" :class="{ active: actualRoute === item.name }">
+						<menu-icons :icon="item.icon" :active="actualRoute === item.name" />
 						<span v-if="isCollapsed">{{ item.title }}</span>
 					</router-link>
 				</li>
@@ -18,7 +18,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, computed } from 'vue'
+import { useRoute } from 'vue-router'
 import { menu } from './menuList'
 import menuIcons from '@/components/spotify/menu-icons.vue'
 
@@ -36,13 +37,19 @@ export default defineComponent({
 	emits: ['update:isCollapsed'],
 
 	setup(props, { emit }) {
+		const route = useRoute()
 		const toggle = () => {
 			emit('update:isCollapsed', !props.isCollapsed)
 		}
 
+		const actualRoute = computed(() => {
+			return route.name
+		})
+
 		return {
 			menu,
 			toggle,
+			actualRoute,
 		}
 	},
 })
@@ -121,7 +128,9 @@ export default defineComponent({
 			}
 
 			&.active {
-				color: white;
+				span {
+					color: white;
+				}
 			}
 		}
 	}

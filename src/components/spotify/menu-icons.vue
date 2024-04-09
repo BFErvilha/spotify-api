@@ -46,29 +46,28 @@
 	</div>
 </template>
 <script lang="ts">
-import { computed } from 'vue'
+import { defineComponent } from 'vue'
 
-export default {
-	name: 'MenuIcons',
+export default defineComponent({
 	props: {
-		icon: {
-			type: String,
-			required: true,
-		},
 		active: {
 			type: Boolean,
 			default: false,
 		},
+		icon: {
+			type: String,
+			required: true,
+		},
 	},
-	setup(props) {
-		const color = computed(() => {
-			return props.active ? 'white' : '#949EA2'
-		})
-
-		return { color }
+	computed: {
+		color() {
+			if (this.active) return 'white'
+			return '#949EA2'
+		},
 	},
-}
+})
 </script>
+
 <style lang="scss" scoped>
 div {
 	display: flex;

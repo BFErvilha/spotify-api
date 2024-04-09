@@ -7,13 +7,13 @@ export const menu = [
 	},
 	{
 		name: 'artists',
-		title: 'Empresas',
+		title: 'Artistas',
 		url: '/artists',
 		icon: 'artists',
 	},
 	{
 		name: 'playlists',
-		title: 'Categorias',
+		title: 'Playlists',
 		url: '/playlists',
 		icon: 'playlists',
 	},
