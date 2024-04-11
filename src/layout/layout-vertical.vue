@@ -16,7 +16,7 @@ export default defineComponent({
 		sidenav,
 	},
 	setup() {
-		const isCollapsed = ref(false)
+		const isCollapsed = ref(true)
 
 		const toggleCollapse = () => {
 			isCollapsed.value = !isCollapsed.value

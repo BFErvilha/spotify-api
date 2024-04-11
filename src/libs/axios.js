@@ -21,7 +21,6 @@ axiosInstance.interceptors.response.use(
 	async error => {
 		if (error.response && error.response.data.error && error.response.data.error.message === 'The access token expired') {
 			try {
-				console.log('chamando refreshToken')
 				const newAccessToken = await refreshAccessToken()
 				localStorage.setItem('tokenSpotify', newAccessToken)
 

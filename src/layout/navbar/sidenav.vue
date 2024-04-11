@@ -21,7 +21,7 @@
 import { defineComponent, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { menu } from './menuList'
-import menuIcons from '@/components/spotify/menu-icons.vue'
+import menuIcons from '@/components/spotify/icons.vue'
 
 export default defineComponent({
 	name: 'SideNav',

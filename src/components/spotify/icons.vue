@@ -44,6 +44,12 @@
 			<path d="M12 15.1874C13.6569 15.1874 15 13.8443 15 12.1874C15 10.5306 13.6569 9.18742 12 9.18742C10.3431 9.18742 9 10.5306 9 12.1874C9 13.8443 10.3431 15.1874 12 15.1874Z" :stroke="color" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
 		</svg>
 	</div>
+	<div v-if="icon === 'back'">
+		<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+			<path d="M25.3333 16H6.66663" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+			<path d="M16 25.3334L6.66663 16L16 6.66669" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+		</svg>
+	</div>
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'

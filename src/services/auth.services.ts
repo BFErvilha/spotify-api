@@ -9,7 +9,7 @@ export const loginSpotify = async () => {
 
 export const refreshAccessToken = async () => {
 	try {
-		const refreshToken = store.getters['spotify/refreshToken']
+		const refreshToken = store.getters['spotify/refreshToken'] || localStorage.getItem('tokenRefreshSpotify')
 		const response = await axios.get(`${API_URL}/api/refresh_token?refresh_token=${refreshToken}`)
 		store.commit('auth/setToken', response.data.access_token)
 		return response.data.access_token

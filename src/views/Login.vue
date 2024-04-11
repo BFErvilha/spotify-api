@@ -1,10 +1,9 @@
 <template>
-	<div class="container d-flex align-center">
+	<div class="container d-flex align-center p-0">
 		<div class="login">
 			<logo />
 			<p>Entra com sua conta Spotify clicando no botão abaixo</p>
 			<button class="btn btn-primary" @click="login">Entrar</button>
-			<div v-if="loading">Carregando...</div>
 		</div>
 	</div>
 </template>
@@ -19,21 +18,16 @@ export default defineComponent({
 		logo,
 	},
 	setup() {
-		const loading = ref(false)
-
 		const login = async () => {
-			loading.value = true
 			try {
 				await loginSpotify()
 			} catch (error) {
 				console.error('Erro ao fazer login:', error)
 				alert('Erro ao fazer login. Por favor, tente novamente.')
-				loading.value = false
 			}
 		}
 
 		return {
-			loading,
 			login,
 		}
 	},
