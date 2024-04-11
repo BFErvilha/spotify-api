@@ -16,23 +16,38 @@ const routes: Array<RouteRecordRaw> = [
 	{
 		path: '/home',
 		name: 'home',
-		meta: { layout: 'vertical' },
+		meta: { layout: 'vertical', menu: 'home' },
 		component: () => import(/* webpackChunkName: "home" */ '../views/Home.vue'),
 	},
 	{
 		path: '/artists',
-		component: () => import(/* webpackChunkName: "artists-root" */ '@/views/artist/root.vue'),
+		component: () => import(/* webpackChunkName: "artists-root" */ '@/views/Root.vue'),
 		meta: { layout: 'vertical' },
 		children: [
 			{
 				path: '',
 				name: 'artists',
+				meta: { menu: 'artists' },
 				component: () => import(/* webpackChunkName: "artists" */ '../views/artist/list.vue'),
 			},
 			{
 				path: ':id',
 				name: 'artist-details',
+				meta: { menu: 'artists' },
 				component: () => import(/* webpackChunkName: "artist-details" */ '../views/artist/details.vue'),
+			},
+		],
+	},
+	{
+		path: '/playlists',
+		component: () => import(/* webpackChunkName: "artists-root" */ '@/views/Root.vue'),
+		meta: { layout: 'vertical' },
+		children: [
+			{
+				path: '',
+				name: 'playlists',
+				meta: { menu: 'playlists' },
+				component: () => import(/* webpackChunkName: "playlist" */ '../views/playlist/list.vue'),
 			},
 		],
 	},

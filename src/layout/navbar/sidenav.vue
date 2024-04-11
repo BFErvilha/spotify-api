@@ -43,7 +43,7 @@ export default defineComponent({
 		}
 
 		const actualRoute = computed(() => {
-			return route.name
+			return route.meta.menu
 		})
 
 		return {

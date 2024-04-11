@@ -1,5 +1,6 @@
 import { Module, ActionContext } from 'vuex'
 import { UserData } from '@/types/userTypes'
+import { getUserData } from '@/services/user.services'
 
 interface SpotifyState {
 	accessToken: string | null
@@ -18,6 +19,7 @@ export const spotify: Module<SpotifyState, any> = {
 	getters: {
 		accessToken: (state): string | null => state.accessToken,
 		refreshToken: (state): string | null => state.refreshToken,
+		userId: (state): string | null => state.spotifyUser?.id ?? null,
 	},
 
 	mutations: {
@@ -40,6 +42,15 @@ export const spotify: Module<SpotifyState, any> = {
 
 		saveUser({ commit }: ActionContext<SpotifyState, any>, spotifyUser: UserData) {
 			commit('SET_SPOTIFY_USER', spotifyUser)
+		},
+
+		async getUser({ commit }) {
+			try {
+				const data = await getUserData()
+				commit('SET_SPOTIFY_USER', data.data)
+			} catch (error) {
+				console.error('Erro ao buscar dados do usuário:', error)
+			}
 		},
 	},
 }

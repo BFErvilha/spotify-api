@@ -37,7 +37,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .container {
 	justify-content: center;
-	height: 97vh;
+	height: 95vh;
 	text-align: center;
 
 	.login {

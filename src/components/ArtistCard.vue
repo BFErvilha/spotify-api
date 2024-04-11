@@ -96,6 +96,7 @@ export default defineComponent({
 	}
 
 	&.album {
+		cursor: pointer;
 		.info {
 			span {
 				text-align: start;

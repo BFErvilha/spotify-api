@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="p-30">
+		<div class="page-header p-30">
 			<h1>Top Artistas</h1>
 			<p>Aqui você encontra seus artistas preferidos</p>
 		</div>
