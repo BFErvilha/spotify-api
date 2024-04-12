@@ -4,14 +4,21 @@
 			<h1>Top Artistas</h1>
 			<p>Aqui você encontra seus artistas preferidos</p>
 		</div>
-		<div class="artist p-30" v-infinite-scroll="getArtistsData" infinite-scroll-distance="10">
-			<ul class="artist-list">
-				<li v-for="(artist, index) in artists" :key="index">
-					<ArtistCard :artist="artist" view="artists" />
-				</li>
-			</ul>
-			<Alert :message="alertMessage" :type="alertType" v-model:visible="showAlert" />
-		</div>
+		<template v-if="artists.length > 0">
+			<div class="artist p-30" v-infinite-scroll="getArtistsData" infinite-scroll-distance="10">
+				<ul class="artist-list">
+					<li v-for="(artist, index) in artists" :key="index">
+						<ArtistCard :artist="artist" view="artists" />
+					</li>
+				</ul>
+				<Alert :message="alertMessage" :type="alertType" v-model:visible="showAlert" />
+			</div>
+		</template>
+		<template v-else>
+			<div class="no-data">
+				<p>{{ loading ? 'Carregando...' : 'Nenhum artista preferido encontrado' }}</p>
+			</div>
+		</template>
 	</div>
 </template>
 <script lang="ts" setup>

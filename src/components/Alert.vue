@@ -4,23 +4,28 @@
 	</div>
 </template>
 
-<script setup>
-import { defineProps, defineEmits } from 'vue'
+<script lang="ts">
+import { defineComponent } from 'vue'
 
-const props = defineProps({
-	message: String,
-	type: {
-		type: String,
-		default: 'info',
+export default defineComponent({
+	name: 'Alert',
+	props: {
+		message: String,
+		type: {
+			type: String,
+			default: 'info',
+		},
+		visible: Boolean,
 	},
-	visible: Boolean,
+	emits: ['update:visible'],
+	setup(props, { emit }) {
+		const closeAlert = () => {
+			emit('update:visible', false)
+		}
+
+		return { closeAlert }
+	},
 })
-
-const emit = defineEmits(['update:visible'])
-
-const closeAlert = () => {
-	emit('update:visible', false)
-}
 </script>
 
 <style lang="scss" scoped>

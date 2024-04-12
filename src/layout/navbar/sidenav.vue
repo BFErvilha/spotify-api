@@ -3,7 +3,7 @@
 		<div class="logo">
 			<img class="logo" src="@/assets/images/spotify-logo.png" />
 		</div>
-		<button @click="toggle" class="sidebar-toggle"></button>
+		<!-- <button @click="toggle" class="sidebar-toggle"></button> -->
 		<div class="sidebar-content">
 			<ul class="sidebar-menu">
 				<li v-for="(item, index) in menu" :key="index">

@@ -9,24 +9,30 @@
 				<button @click="showModal = true" class="btn btn-primary playlist">Criar Playlist</button>
 			</div>
 		</div>
-		<div class="row mt-5" v-infinite-scroll="getPlaylists" infinite-scroll-distance="10">
-			<div class="col-md-6 col-lg-3 mb-5 dropdown-container" v-for="playlist in playlists" :key="playlist.id">
-				<PlaylistCard :playlist="playlist" @click="toggleDropdown(playlist.id)" />
-				<div class="dropdown-menu playlist-dropdown" :class="{ active: activeDropdownId === playlist.id }">
-					<div class="dropdown-header">
-						<div class="popularity">
-							<span class="badge">{{ playlist.public ? 'Publica' : 'Privada' }}</span>
-							<span class="badge">{{ playlist.collaborative ? 'Colaborativa' : 'Pessoal' }}</span>
+		<template v-if="playlists.length > 0">
+			<div class="row mt-5" v-infinite-scroll="getPlaylists" infinite-scroll-distance="10">
+				<div class="col-md-6 col-lg-3 mb-5 dropdown-container" v-for="playlist in playlists" :key="playlist.id">
+					<PlaylistCard :playlist="playlist" @click="toggleDropdown(playlist.id)" />
+					<div class="dropdown-menu playlist-dropdown" :class="{ active: activeDropdownId === playlist.id }">
+						<div class="dropdown-header">
+							<div class="popularity">
+								<span class="badge">{{ playlist.public ? 'Publica' : 'Privada' }}</span>
+								<span class="badge">{{ playlist.collaborative ? 'Colaborativa' : 'Pessoal' }}</span>
+							</div>
+							<div class="label">Total de Musicas: {{ playlist.tracks.total }}</div>
 						</div>
-						<div class="label">Total de Musicas: {{ playlist.tracks.total }}</div>
-					</div>
-					<div class="description" v-if="playlist.description">
-						{{ playlist.description }}
+						<div class="description" v-if="playlist.description">
+							{{ playlist.description }}
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-
+		</template>
+		<template v-else>
+			<div class="no-data">
+				<p>{{ loading ? 'Carregando...' : 'Nenhuma playlist encontrada' }}</p>
+			</div>
+		</template>
 		<Alert :message="alertMessage" :type="alertType" v-model:visible="showAlert" />
 		<Modal v-if="showModal" @close="showModal = false" @request="createPlaylist($event)" />
 	</div>
@@ -40,7 +46,6 @@ import type { Playlist } from '@/types/playlistType'
 import PlaylistCard from '@/components/PlaylistCard.vue'
 import Alert from '@/components/Alert.vue'
 import Modal from '@/components/Modal.vue'
-
 export default defineComponent({
 	name: 'PlaylistList',
 	components: {
@@ -102,9 +107,9 @@ export default defineComponent({
 			}
 		}
 
-		const activeDropdownId = ref(null)
+		const activeDropdownId = ref<string | null>(null)
 
-		const toggleDropdown = (id: any) => {
+		const toggleDropdown = (id: string) => {
 			if (activeDropdownId.value === id) {
 				activeDropdownId.value = null
 			} else {
@@ -122,7 +127,6 @@ export default defineComponent({
 
 		const onScroll = async () => {
 			const { scrollTop, scrollHeight, clientHeight } = document.documentElement
-			// Certifique-se de que a chamada só aconteça se estiver próximo do final da página e não esteja carregando
 			if (scrollHeight - scrollTop <= clientHeight * 1.5 && hasMore.value && !loading.value) {
 				await getPlaylists()
 			}
@@ -206,5 +210,13 @@ export default defineComponent({
 	.description {
 		padding: 10px;
 	}
+}
+
+.no-data {
+	text-align: center;
+	margin-top: 15%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 </style>

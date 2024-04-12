@@ -34,7 +34,7 @@ type AlbumArtist = {
 	uri: string
 }
 
-type Album = {
+export type Album = {
 	album_group: string
 	album_type: string
 	artists: AlbumArtist[]
@@ -53,9 +53,9 @@ type Album = {
 
 export type ArtistDetail = {
 	artist: Artist | null
-	albums: Album | any
+	albums: Album[]
 	topTracks: topTracks[] | null
-	relatedArtists: any
+	relatedArtists: Artist[] | null
 }
 
 type topTracks = {

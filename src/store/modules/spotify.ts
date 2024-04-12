@@ -7,8 +7,10 @@ interface SpotifyState {
 	refreshToken: string | null
 	spotifyUser: UserData | null
 }
-
-export const spotify: Module<SpotifyState, any> = {
+type RootState = {
+	[key: string]: string | number | boolean
+}
+export const spotify: Module<SpotifyState, RootState> = {
 	namespaced: true,
 	state: (): SpotifyState => ({
 		accessToken: null,
@@ -20,6 +22,7 @@ export const spotify: Module<SpotifyState, any> = {
 		accessToken: (state): string | null => state.accessToken,
 		refreshToken: (state): string | null => state.refreshToken,
 		userId: (state): string | null => state.spotifyUser?.id ?? null,
+		userData: (state): UserData | null => state.spotifyUser,
 	},
 
 	mutations: {
@@ -45,7 +48,7 @@ export const spotify: Module<SpotifyState, any> = {
 			commit('SET_REFRESH_TOKEN', payload.refreshToken)
 		},
 
-		saveUser({ commit }: ActionContext<SpotifyState, any>, spotifyUser: UserData) {
+		saveUser({ commit }: ActionContext<SpotifyState, RootState>, spotifyUser: UserData) {
 			commit('SET_SPOTIFY_USER', spotifyUser)
 		},
 

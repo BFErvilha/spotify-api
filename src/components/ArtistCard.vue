@@ -31,11 +31,26 @@ class LinkManager {
 	}
 }
 
+interface ArtistType {
+	id: string
+	name: string
+	images: Array<{ url: string }>
+	release_date: string
+}
+
+interface AlbumType {
+	id: string
+	title: string
+	tracks: Array<{ name: string; duration: number }>
+	images: Array<{ url: string }>
+	name: string
+	release_date: string
+}
 export default defineComponent({
 	name: 'ArtistCard',
 	props: {
-		artist: { type: Object as PropType<{ id: string; name: string; images: Array<{ url: string }> }>, default: () => ({}) },
-		album: { type: Object as any, default: () => ({}) },
+		artist: { type: Object as PropType<ArtistType>, default: () => ({}) },
+		album: { type: Object as PropType<AlbumType>, default: () => ({}) },
 		view: { type: String, required: true },
 	},
 	setup(props) {

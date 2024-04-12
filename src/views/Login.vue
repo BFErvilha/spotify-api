@@ -9,7 +9,7 @@
 </template>
 <script lang="ts">
 import { loginSpotify } from '@/services/auth.services'
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 import logo from '@/components/spotify/logo.vue'
 
 export default defineComponent({

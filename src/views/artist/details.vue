@@ -26,9 +26,12 @@
 			</div>
 
 			<div class="col-md-3">
-				<div class="top-ten">
+				<div class="top-ten mb-5">
 					<h3 class="title">Top 10</h3>
-					<div v-for="track in artistDetails.topTracks" :key="track.id">{{ track.name }} {{ track.album.name }} {{ formatTrackTime(track.duration_ms) }}</div>
+					<div class="top-tracks" v-for="track in artistDetails.topTracks" :key="track.id">
+						<span>{{ track.name }}</span> <span>{{ track.album.name }}</span
+						><span> {{ formatTrackTime(track.duration_ms) }}</span>
+					</div>
 				</div>
 				<div class="relationed-artists">
 					<h3 class="title">Artistas Rlecionados</h3>
@@ -45,7 +48,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref, onMounted, watch, computed, onUnmounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { getArtistDetails, getAlbums, getTopTracks, getRelatedArtists } from '@/services/artist.services'
 import { getAlbumDetails } from '@/services/album.services'
 
@@ -54,6 +57,7 @@ import ArtistCard from '@/components/ArtistCard.vue'
 import Alert from '@/components/Alert.vue'
 
 import type { ArtistDetail } from '@/types/artistType'
+import type { Album, Track } from '@/types/albumType'
 import moment from 'moment'
 import 'moment-duration-format'
 
@@ -78,8 +82,7 @@ export default defineComponent({
 	},
 	setup() {
 		const route = useRoute()
-		const router = useRouter()
-		const selectedAlbumId = ref(null)
+		const selectedAlbumId = ref<string | null>(null)
 		const selectedAlbum = ref<AlbumInfo | null>(null)
 		const artistDetails = ref<ArtistDetail>({
 			artist: null,
@@ -125,9 +128,9 @@ export default defineComponent({
 				loading.value = false
 			}
 		}
-		const activeDropdownId = ref(null)
+		const activeDropdownId = ref<string | null>(null)
 
-		const toggleDropdown = (id: any) => {
+		const toggleDropdown = (id: string) => {
 			if (activeDropdownId.value === id) {
 				activeDropdownId.value = null
 			} else {
@@ -136,10 +139,10 @@ export default defineComponent({
 			}
 		}
 
-		const extractAlbumInfo = (album: any) => {
+		const extractAlbumInfo = (album: Album) => {
 			const { label, popularity, tracks } = album
 
-			const tracksInfo = tracks.items.map((track: any) => ({
+			const tracksInfo = tracks.items.map((track: Track) => ({
 				name: track.name,
 				duration: track.duration_ms,
 				explicit: track.explicit,
@@ -152,7 +155,7 @@ export default defineComponent({
 			}
 		}
 
-		const handleAlbumInfo = async (id: any) => {
+		const handleAlbumInfo = async (id: string) => {
 			try {
 				const response = await getAlbumDetails(id)
 				selectedAlbum.value = extractAlbumInfo(response.data)
@@ -262,10 +265,20 @@ export default defineComponent({
 			alertMessage,
 			alertType,
 			showAlert,
+			loading,
 		}
 	},
 })
 </script>
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
+
+.top-tracks {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px;
+	font-size: 14px;
+	font-weight: 600;
+}
 </style>

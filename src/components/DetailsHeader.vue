@@ -6,7 +6,7 @@
 		</div>
 
 		<div class="artist-image">
-			<img :src="image" :alt="name" />
+			<img :src="image" :alt="name" loading="lazy" />
 		</div>
 	</div>
 </template>
@@ -23,10 +23,12 @@ export default defineComponent({
 		name: {
 			type: String,
 			required: true,
+			default: 'Nome do Artista',
 		},
 		image: {
 			type: String,
 			required: true,
+			default: '@/assets/images/noimage.jpg',
 		},
 	},
 })
