@@ -3,11 +3,24 @@ import axios from 'axios'
 import qs from 'qs'
 
 const clientId = process.env.VUE_APP_CLIENT_ID
-const clientSecret = process.env.VUE_APP_CLIENT_SECRET
 const redirectUri = process.env.VUE_APP_REDIRECT_URI
 const refreshTokenUrl = 'https://accounts.spotify.com/api/token'
 
-export const generateRandomString = (length: number) => {
+export const generateCodeVerifier = () => {
+	return generateRandomString(128)
+}
+
+export const generateCodeChallenge = async codeVerifier => {
+	const encoder = new TextEncoder()
+	const data = encoder.encode(codeVerifier)
+	const hash = await crypto.subtle.digest('SHA-256', data)
+	return btoa(String.fromCharCode(...new Uint8Array(hash)))
+		.replace(/\+/g, '-')
+		.replace(/\//g, '_')
+		.replace(/=+$/, '')
+}
+
+export const generateRandomString = length => {
 	const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 	let result = ''
 	for (let i = 0; i < length; i++) {
@@ -16,32 +29,36 @@ export const generateRandomString = (length: number) => {
 	return result
 }
 
-export const getAuthOptions = (code, clientId, clientSecret, redirectUri) => {
-	return {
-		method: 'post',
-		url: 'https://accounts.spotify.com/api/token',
-		data: qs.stringify({
-			code,
-			redirect_uri: process.env.VUE_APP_REDIRECT_URI,
-			grant_type: 'authorization_code',
-		}),
-		headers: {
-			'Content-Type': 'application/x-www-form-urlencoded',
-			Authorization: `Basic ${btoa(`${clientId}:${clientSecret}`)}`,
-		},
-	}
-}
-
-// Continuação do seu auth.service
-
 export const exchangeCodeForTokens = async (code: string, expectedState: string) => {
 	const storedState = localStorage.getItem('spotify_auth_state')
 	if (expectedState !== storedState) {
 		throw new Error('State mismatch')
 	}
 
+	const codeVerifier = localStorage.getItem('spotify_code_verifier')
+	if (!codeVerifier) {
+		throw new Error('Code Verifier not found')
+	}
+
 	try {
-		const response = await axios(getAuthOptions(code, clientId, clientSecret, redirectUri))
+		const data = qs.stringify({
+			client_id: clientId,
+			grant_type: 'authorization_code',
+			code: code,
+			redirect_uri: redirectUri,
+			code_verifier: codeVerifier,
+		})
+
+		const options = {
+			method: 'post',
+			url: 'https://accounts.spotify.com/api/token',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			data: data,
+		}
+
+		const response = await axios(options)
 		const { access_token, refresh_token } = response.data
 		return { accessToken: access_token, refreshToken: refresh_token }
 	} catch (error) {
@@ -53,14 +70,22 @@ export const exchangeCodeForTokens = async (code: string, expectedState: string)
 export const loginSpotify = async () => {
 	const state = generateRandomString(16)
 	localStorage.setItem('spotify_auth_state', state)
-	const scope = 'streaming user-read-email user-read-private user-library-read user-library-modify user-read-playback-state user-modify-playback-state user-top-read playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify-public'
+
+	const codeVerifier = generateCodeVerifier()
+	localStorage.setItem('spotify_code_verifier', codeVerifier)
+
+	const codeChallenge = await generateCodeChallenge(codeVerifier)
+	const scope = 'user-read-email user-read-private user-library-read user-library-modify user-read-playback-state user-modify-playback-state user-top-read playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify-public'
 	const queryParams = qs.stringify({
 		response_type: 'code',
 		client_id: clientId,
 		scope,
 		redirect_uri: redirectUri,
 		state,
+		code_challenge_method: 'S256',
+		code_challenge: codeChallenge,
 	})
+
 	window.location.href = `https://accounts.spotify.com/authorize?${queryParams}`
 }
 
@@ -72,11 +97,11 @@ export const refreshAccessToken = async () => {
 			url: refreshTokenUrl,
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
-				Authorization: `Basic ${btoa(`${clientId}:${clientSecret}`)}`,
 			},
 			data: qs.stringify({
 				grant_type: 'refresh_token',
 				refresh_token: refreshToken,
+				client_id: clientId,
 			}),
 		}
 

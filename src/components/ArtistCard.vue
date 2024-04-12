@@ -17,6 +17,7 @@
 <script lang="ts">
 import { defineComponent, computed, PropType, ref } from 'vue'
 import moment from 'moment'
+import type { Album, Artist } from '@/types/artistType'
 
 class LinkManager {
 	private static instance: LinkManager = new LinkManager()
@@ -31,26 +32,11 @@ class LinkManager {
 	}
 }
 
-interface ArtistType {
-	id: string
-	name: string
-	images: Array<{ url: string }>
-	release_date: string
-}
-
-interface AlbumType {
-	id: string
-	title: string
-	tracks: Array<{ name: string; duration: number }>
-	images: Array<{ url: string }>
-	name: string
-	release_date: string
-}
 export default defineComponent({
 	name: 'ArtistCard',
 	props: {
-		artist: { type: Object as PropType<ArtistType>, default: () => ({}) },
-		album: { type: Object as PropType<AlbumType>, default: () => ({}) },
+		artist: { type: Object as PropType<Artist>, default: () => ({}) },
+		album: { type: Object as PropType<Album>, default: () => ({}) },
 		view: { type: String, required: true },
 	},
 	setup(props) {
@@ -61,7 +47,15 @@ export default defineComponent({
 		const contentLink = computed(() => (isLinkRequired.value ? linkManager.getLink(props.view, content.value.id) : ''))
 		const contentImage = computed(() => content.value.images?.[0]?.url ?? '')
 		const contentName = computed(() => content.value.name)
-		const contentReleaseDate = computed(() => (props.view === 'albums' ? content.value.release_date : ''))
+
+		const contentReleaseDate = computed(() => {
+			if (props.view === 'albums') {
+				const album = content.value as Album
+				return album.release_date
+			}
+			return ''
+		})
+
 		const cardView = computed(() => (props.view === 'albums' ? 'square' : 'rounded'))
 
 		const formatDate = (dataString: string) => {
