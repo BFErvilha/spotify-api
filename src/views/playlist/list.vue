@@ -6,7 +6,7 @@
 				<p>Sua coleção pessoal de playlists</p>
 			</div>
 			<div class="col-md-3 text-end">
-				<button class="btn btn-primary playlist">Criar Playlist</button>
+				<button @click="showModal = true" class="btn btn-primary playlist">Criar Playlist</button>
 			</div>
 		</div>
 		<div class="row mt-5" v-infinite-scroll="getPlaylists" infinite-scroll-distance="10">
@@ -28,35 +28,59 @@
 		</div>
 
 		<Alert :message="alertMessage" :type="alertType" v-model:visible="showAlert" />
+		<Modal v-if="showModal" @close="showModal = false" @request="createPlaylist($event)" />
 	</div>
 </template>
 <script lang="ts">
 import { defineComponent, onMounted, ref, watchEffect, watch, onUnmounted } from 'vue'
-import { getUserPlaylists } from '@/services/user.services'
+import { getUserPlaylists, postUserPlaylist } from '@/services/user.services'
 import { useStore } from 'vuex'
 import type { Playlist } from '@/types/playlistType'
 
 import PlaylistCard from '@/components/PlaylistCard.vue'
 import Alert from '@/components/Alert.vue'
+import Modal from '@/components/Modal.vue'
 
 export default defineComponent({
 	name: 'PlaylistList',
 	components: {
 		PlaylistCard,
 		Alert,
+		Modal,
 	},
 	setup() {
 		const playlists = ref<Playlist[]>([])
 		const store = useStore()
 		const userId = ref(store.getters['spotify/userId'])
-
-		const limit = ref(25)
+		const showModal = ref(false)
+		const limit = ref(30)
 		const offset = ref(0)
 		const loading = ref(false)
 		const hasMore = ref(true)
 		const showAlert = ref(false)
 		const alertMessage = ref('')
 		const alertType = ref('info')
+
+		const createPlaylist = async (PlaylistName: string) => {
+			try {
+				const params = {
+					name: PlaylistName,
+					description: 'Playlist criada pelo app de desenvolvimento',
+					public: false,
+				}
+				const response = await postUserPlaylist(userId.value, params)
+				if (response.status === 201) {
+					setTimeout(async () => {
+						showModal.value = false
+						offset.value = 0
+						playlists.value = []
+						await getPlaylists()
+					}, 2000)
+				}
+			} catch (error) {
+				console.error('Erro ao criar playlist:', error)
+			}
+		}
 
 		const getPlaylists = async () => {
 			if (loading.value || !hasMore.value) return
@@ -152,6 +176,8 @@ export default defineComponent({
 			alertMessage,
 			alertType,
 			getPlaylists,
+			showModal,
+			createPlaylist,
 		}
 	},
 })

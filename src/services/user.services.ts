@@ -17,3 +17,7 @@ export const getUserPlaylists = async (id: string, params: any) => {
 	const parameters = urlString(params)
 	return axiosInstance.get(`${resourceUser}/${id}/playlists?${parameters}`)
 }
+
+export const postUserPlaylist = async (id: string, params: any) => {
+	return axiosInstance.post(`${resourceUser}/${id}/playlists`, params)
+}

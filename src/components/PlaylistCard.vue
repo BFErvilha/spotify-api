@@ -21,12 +21,17 @@ export default defineComponent({
 	setup(props) {
 		const playlistSummary = computed(() => {
 			const { playlist } = props
-			console.log(playlist)
+			let image = ''
+			if (playlist && playlist.images && playlist.images.length > 0) {
+				image = playlist.images[0].url
+			} else {
+				image = require('@/assets/images/noimage.jpg')
+			}
 
 			return {
 				id: playlist.id,
 				name: playlist.name,
-				imageUrl: playlist.images[0].url || '@/assets/images/no-image.jpg',
+				imageUrl: image,
 				ownerDisplayName: playlist.owner.display_name,
 			}
 		})

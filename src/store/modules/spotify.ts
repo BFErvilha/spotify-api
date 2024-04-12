@@ -32,6 +32,11 @@ export const spotify: Module<SpotifyState, any> = {
 		SET_SPOTIFY_USER(state, spotifyUser: UserData) {
 			state.spotifyUser = spotifyUser
 		},
+		RESET_USER_STATE(state) {
+			state.accessToken = null
+			state.refreshToken = null
+			state.spotifyUser = null
+		},
 	},
 
 	actions: {
@@ -51,6 +56,14 @@ export const spotify: Module<SpotifyState, any> = {
 			} catch (error) {
 				console.error('Erro ao buscar dados do usuário:', error)
 			}
+		},
+
+		logout({ commit }) {
+			commit('RESET_USER_STATE')
+
+			localStorage.removeItem('accessToken')
+			localStorage.removeItem('refreshToken')
+			localStorage.removeItem('spotifyUser')
 		},
 	},
 }

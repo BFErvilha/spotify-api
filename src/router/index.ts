@@ -51,6 +51,12 @@ const routes: Array<RouteRecordRaw> = [
 			},
 		],
 	},
+	{
+		path: '/profile',
+		name: 'profile',
+		meta: { layout: 'vertical', menu: 'profile' },
+		component: () => import(/* webpackChunkName: "home" */ '../views/profile.vue'),
+	},
 ]
 
 const router = createRouter({

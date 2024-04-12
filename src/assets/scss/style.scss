@@ -245,12 +245,14 @@ a{
 
     .tracks {
       padding: 5px;
-
+      height: 410px;
+      overflow: auto;
       .track {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin: 5px auto;
+        
       }
 
       span {
