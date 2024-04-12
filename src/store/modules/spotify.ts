@@ -43,6 +43,9 @@ export const spotify: Module<SpotifyState, RootState> = {
 	},
 
 	actions: {
+		refreshAccessToken({ commit }, access_token: string) {
+			commit('SET_ACCESS_TOKEN', access_token)
+		},
 		saveTokens({ commit }, payload: { accessToken: string; refreshToken: string }) {
 			commit('SET_ACCESS_TOKEN', payload.accessToken)
 			commit('SET_REFRESH_TOKEN', payload.refreshToken)
