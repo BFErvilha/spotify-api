@@ -195,7 +195,6 @@ export default defineComponent({
 	padding: 0px 40px 0px 40px;
 	gap: 10px;
 	border-radius: 24px;
-	opacity: 0px;
 
 	font-size: 16px;
 	font-weight: 700;
