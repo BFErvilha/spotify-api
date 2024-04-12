@@ -245,7 +245,7 @@ a{
 
     .tracks {
       padding: 5px;
-      height: 410px;
+      max-height: 217px;
       overflow: auto;
       .track {
         display: flex;
