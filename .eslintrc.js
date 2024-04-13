@@ -13,4 +13,7 @@ module.exports = {
 		'vue/multi-word-component-names': 'off',
 		'@typescript-eslint/no-empty-function': ['error', { allow: ['constructors'] }],
 	},
+	globals: {
+		BeforeInstallPromptEvent: 'readonly',
+	},
 }

@@ -29,7 +29,6 @@ export const footerMenu = [
 	{
 		name: 'pwa',
 		title: 'Instalar PWA',
-		url: '/profile',
 		icon: 'pwa',
 	},
 ]

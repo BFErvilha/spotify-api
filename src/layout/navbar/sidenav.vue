@@ -13,12 +13,16 @@
 					</router-link>
 				</li>
 			</ul>
+			<div class="sidebar-footer" @click="installPWA">
+				<menu-icons icon="pwa" :class="{ active: true }" />
+				<span> Instalar PWA </span>
+			</div>
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute } from 'vue-router'
 import { menu } from './menuList'
 import menuIcons from '@/components/spotify/icons.vue'
@@ -38,6 +42,9 @@ export default defineComponent({
 
 	setup(props, { emit }) {
 		const route = useRoute()
+		const deferredPrompt = ref<BeforeInstallPromptEvent | null>(null)
+		const showInstallButton = ref(false)
+
 		const toggle = () => {
 			emit('update:isCollapsed', !props.isCollapsed)
 		}
@@ -46,10 +53,37 @@ export default defineComponent({
 			return route.meta.menu
 		})
 
+		const captureInstallEvent = (e: BeforeInstallPromptEvent) => {
+			e.preventDefault()
+			deferredPrompt.value = e
+		}
+		const installPWA = async () => {
+			if (deferredPrompt.value) {
+				await deferredPrompt.value.prompt()
+				const { outcome } = await deferredPrompt.value.userChoice
+				if (outcome === 'accepted') {
+					console.log('Usuário aceitou a instalação do PWA')
+				} else {
+					console.log('Usuário recusou a instalação do PWA')
+				}
+				deferredPrompt.value = null
+			}
+		}
+
+		onMounted(() => {
+			window.addEventListener('beforeinstallprompt', captureInstallEvent as any)
+		})
+
+		onBeforeUnmount(() => {
+			window.removeEventListener('beforeinstallprompt', captureInstallEvent as any)
+		})
+
 		return {
 			menu,
 			toggle,
 			actualRoute,
+			showInstallButton,
+			installPWA,
 		}
 	},
 })
@@ -144,5 +178,16 @@ export default defineComponent({
 	.collapsed {
 		transform: translateX(0);
 	}
+}
+
+.sidebar-footer {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	gap: 10px;
+	padding-left: 17px;
+	position: fixed;
+	bottom: 15px;
+	cursor: pointer;
 }
 </style>

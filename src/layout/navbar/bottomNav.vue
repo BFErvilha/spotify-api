@@ -8,12 +8,18 @@
 						<span>{{ item.title }} </span>
 					</router-link>
 				</li>
+				<li>
+					<div class="nav-link" @click="installPWA">
+						<menu-icons icon="pwa" />
+						<span> PWA </span>
+					</div>
+				</li>
 			</ul>
 		</div>
 	</div>
 </template>
 <script lang="ts">
-import { defineComponent, computed, ref, onMounted, onUnmounted } from 'vue'
+import { defineComponent, computed, ref, onMounted, onUnmounted, onBeforeUnmount } from 'vue'
 import { useRoute } from 'vue-router'
 import { menu } from './menuList'
 import menuIcons from '@/components/spotify/icons.vue'
@@ -32,13 +38,36 @@ export default defineComponent({
 	setup() {
 		const route = useRoute()
 		const isMobile = ref(window.innerWidth <= 768)
+		const deferredPrompt = ref<BeforeInstallPromptEvent | null>(null)
+		const showInstallButton = ref(false)
 
 		const handleResize = () => {
 			isMobile.value = window.innerWidth <= 768
 		}
+		const captureInstallEvent = (e: BeforeInstallPromptEvent) => {
+			e.preventDefault()
+			deferredPrompt.value = e
+		}
+		const installPWA = async () => {
+			if (deferredPrompt.value) {
+				await deferredPrompt.value.prompt()
+				const { outcome } = await deferredPrompt.value.userChoice
+				if (outcome === 'accepted') {
+					console.log('Usuário aceitou a instalação do PWA')
+				} else {
+					console.log('Usuário recusou a instalação do PWA')
+				}
+				deferredPrompt.value = null
+			}
+		}
 
 		onMounted(() => {
 			window.addEventListener('resize', handleResize)
+			window.addEventListener('beforeinstallprompt', captureInstallEvent as any)
+		})
+
+		onBeforeUnmount(() => {
+			window.removeEventListener('beforeinstallprompt', captureInstallEvent as any)
 		})
 
 		onUnmounted(() => {
@@ -51,6 +80,7 @@ export default defineComponent({
 			menu,
 			actualRoute,
 			isMobile,
+			installPWA,
 		}
 	},
 })
