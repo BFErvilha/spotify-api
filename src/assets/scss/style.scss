@@ -216,10 +216,15 @@ a{
           width: 420px;
         }
       
-        @media (max-width: 630px) {
+        @media (min-width: 321px) and (max-width: 630px) {
           position: static;
-          width: 270px;
+          width: calc(100% - 30px);
           padding: 10px 5px;
+        }
+        @media  (max-width: 320px) {
+            position: static;
+            width: 100%;
+            padding: 10px 5px;
         }
     }
 
@@ -270,7 +275,7 @@ a{
       padding: 5px;
       max-height: 217px;
       overflow: auto;
-      width: 260px;
+      
 
       .track {
         display: flex;
