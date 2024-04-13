@@ -67,7 +67,7 @@ Essas configurações são essenciais para integrar sua aplicação com a API do
 
 -   **Testes Unitários**: Conduzi testes unitários em alguns componentes para garantir a estabilidade do código.
 
--   **Deploy Contínuo**: Configurei o projeto para permitir atualizações rápidas com deploy contínuo na [Vercel](https://vercel.com). A aplicação pode ser acessada através deste [link](https://spotify-api-murex-eight.vercel.app/).
+-   **Deploy**: Configurei o projeto para permitir atualizações rápidas com deploy contínuo na [Vercel](https://vercel.com). A aplicação pode ser acessada através deste [link](https://spotify-api-bruno-ervilha.vercel.app/).
 
 -   **Responsividade**: Garanti que a aplicação funcionasse bem em celulares e tablets.
 -   **PWA**: Transformei a aplicação em um PWA, possibilitando uso do projeto como um aplicativo mobile.
