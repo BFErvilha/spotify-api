@@ -34,24 +34,24 @@ Essas configurações são essenciais para integrar sua aplicação com a API do
 
 ## Metas e Objetivos
 
--   [OK] Seguimentação de commits
--   [OK] Lint
--   [OK] Autenticação via Spotify
--   [OK] Listar artistas
--   [OK] Listar álbuns de um artista
--   [OK] Utilizar paginação (scroll infinito ou não)
--   [ ] Funcionamento offline
--   [OK] Testes unitários
--   [OK] Deploy da aplicação
+-   [+] Seguimentação de commits
+-   [+] Lint
+-   [+] Autenticação via Spotify
+-   [+] Listar artistas
+-   [+] Listar álbuns de um artista
+-   [+] Utilizar paginação (scroll infinito ou não)
+-   [-] Funcionamento offline
+-   [+] Testes unitários
+-   [+] Deploy da aplicação
 
 ## Bônus
 
--   [ ] Testes E2E
--   [ ] Integração com Sentry
--   [ ] CI/CD
--   [OK] Responsividade (celular e tablet)
--   [ ] Qualidade de código (Sonarqube)
--   [OK] PWA
+-   [-] Testes E2E
+-   [-] Integração com Sentry
+-   [-] CI/CD
+-   [+] Responsividade (celular e tablet)
+-   [-] Qualidade de código (Sonarqube)
+-   [+] PWA
 
 ## Conquistas do Projeto
 
