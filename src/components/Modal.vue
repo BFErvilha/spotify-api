@@ -34,8 +34,6 @@ export default defineComponent({
 
 		const createPlaylist = () => {
 			emit('request', playlistName.value)
-			// console.log('Playlist criada com o nome:', playlistName.value)
-			// closeModal()
 		}
 
 		onMounted(() => {
@@ -109,11 +107,16 @@ export default defineComponent({
 
 .modal-content {
 	background-color: #303030;
-	width: 600px;
+	max-width: 600px;
+	width: 100%;
 	height: 314px;
 	border-radius: 32px;
 	padding: 20px;
 	position: relative;
+
+	@media (max-width: 600px) {
+		padding: 0px;
+	}
 
 	.modal-header {
 		.close-button {

@@ -2,7 +2,7 @@
 	<div class="p-30">
 		<DetailsHeader :name="artistDetails.artist?.name!" :image="artistDetails.artist?.images[0].url!" />
 		<div class="row">
-			<div class="col-md-12 col-lg-7 col-xl-9" v-infinite-scroll="handleArtistAlbums" infinite-scroll-distance="10">
+			<div class="col-md-12 col-lg-7 col-xl-9 mb-5" v-infinite-scroll="handleArtistAlbums" infinite-scroll-distance="10">
 				<div class="row">
 					<div class="col-md-6 col-lg-6 col-xl-4 mt-4 dropdown-container" v-for="album in artistDetails.albums" :key="album.id">
 						<ArtistCard :album="album" view="albums" @click="toggleDropdown(album.id)" />
@@ -36,7 +36,7 @@
 				<div class="relationed-artists">
 					<h3 class="title">Artistas Rlecionados</h3>
 					<div class="row">
-						<div class="col-xl-6 mt-5" v-for="artist in firstSixRelatedArtists" :key="artist.id">
+						<div class="col-xl-6 mt-3" v-for="artist in firstSixRelatedArtists" :key="artist.id">
 							<ArtistCard :artist="artist" view="artists" />
 						</div>
 					</div>

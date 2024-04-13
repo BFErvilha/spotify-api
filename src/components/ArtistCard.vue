@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, PropType, ref } from 'vue'
+import { defineComponent, computed, PropType } from 'vue'
 import moment from 'moment'
 import type { Album, Artist } from '@/types/artistType'
 
@@ -62,12 +62,6 @@ export default defineComponent({
 			return moment(dataString).format('DD/MM/YYYY')
 		}
 
-		const isDropdownOpen = ref(false)
-
-		const toggleDropdown = () => {
-			isDropdownOpen.value = !isDropdownOpen.value
-		}
-
 		return {
 			isLinkRequired,
 			contentLink,
@@ -76,8 +70,6 @@ export default defineComponent({
 			contentReleaseDate,
 			cardView,
 			formatDate,
-			isDropdownOpen,
-			toggleDropdown,
 		}
 	},
 })

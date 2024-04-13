@@ -14,7 +14,7 @@
 				<div class="col-md-6 col-lg-3 mb-5 dropdown-container" v-for="playlist in playlists" :key="playlist.id">
 					<PlaylistCard :playlist="playlist" @click="toggleDropdown(playlist.id)" />
 					<div class="dropdown-menu playlist-dropdown" :class="{ active: activeDropdownId === playlist.id }">
-						<div class="dropdown-header">
+						<div class="dropdown-header dropdown-playlist">
 							<div class="popularity">
 								<span class="badge">{{ playlist.public ? 'Publica' : 'Privada' }}</span>
 								<span class="badge">{{ playlist.collaborative ? 'Colaborativa' : 'Pessoal' }}</span>

@@ -5,32 +5,37 @@ const axiosInstance = axios.create({
 	baseURL: 'https://api.spotify.com/v1',
 })
 
-axiosInstance.interceptors.request.use(config => {
-	let token = localStorage.getItem('tokenSpotify')
+function getToken() {
+	return localStorage.getItem('tokenSpotify')
+}
 
-	if (token) {
-		config.headers.Authorization = `Bearer ${token}`
-	}
-	return config
-})
+axiosInstance.interceptors.request.use(
+	config => {
+		const token = getToken()
+
+		if (token) {
+			config.headers.Authorization = `Bearer ${token}`
+		}
+		return config
+	},
+	error => Promise.reject(error),
+)
 
 axiosInstance.interceptors.response.use(
-	response => {
-		return response
-	},
+	response => response,
 	async error => {
-		if (error.response && error.response.data.error && error.response.data.error.message === 'The access token expired') {
+		const originalRequest = error.config
+		if (error.response && error.response.data.error && error.response.data.error.message === 'The access token expired' && !originalRequest._retry) {
+			originalRequest._retry = true
 			try {
 				const newAccessToken = await refreshAccessToken()
 				localStorage.setItem('tokenSpotify', newAccessToken)
-
-				error.config.headers['Authorization'] = `Bearer ${newAccessToken}`
-				return axios(error.config)
+				originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`
+				return axiosInstance(originalRequest)
 			} catch (refreshError) {
 				return Promise.reject(refreshError)
 			}
 		}
-
 		return Promise.reject(error)
 	},
 )

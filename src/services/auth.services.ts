@@ -114,6 +114,8 @@ export const refreshAccessToken = async () => {
 		return access_token
 	} catch (error) {
 		console.error('Erro ao atualizar o token:', error)
+		localStorage.removeItem('tokenRefreshSpotify')
+		store.commit('spotify/logout')
 		throw error
 	}
 }

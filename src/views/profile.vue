@@ -1,5 +1,5 @@
 <template>
-	<div class="container d-flex align-center p-0">
+	<div class="container">
 		<div class="col-md-12 profile">
 			<img :src="userData.images[1].url" :alt="userData.display_name" />
 			<h2>{{ userData.display_name }}</h2>
@@ -38,10 +38,16 @@ export default defineComponent({
 	},
 })
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+.container {
+	min-height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 0;
+}
 .profile {
 	text-align: center;
-	margin-top: 20%;
 
 	img {
 		width: 128px;

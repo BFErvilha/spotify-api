@@ -3,6 +3,8 @@ module.exports = {
 	testEnvironment: 'jsdom',
 	moduleNameMapper: {
 		'^@/(.*)$': '<rootDir>/src/$1',
+		'\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/__mocks__/fileMock.js',
+		'\\.(css|less|scss|sass)$': 'identity-obj-proxy',
 	},
 	moduleFileExtensions: ['js', 'ts', 'json', 'vue'],
 	transform: {

@@ -1,19 +1,21 @@
 <template>
 	<div class="app-container">
-		<sidenav :isCollapsed="isCollapsed" @update:isCollapsed="updateCollapse" />
+		<sidenav v-if="!isMobile" :isCollapsed="isCollapsed" @update:isCollapsed="updateCollapse" />
 		<div class="main-content" :class="{ expanded: !isCollapsed }">
 			<router-view />
 		</div>
+		<bottomNav v-if="isMobile" />
 	</div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, onMounted, onUnmounted } from 'vue'
 import sidenav from '@/layout/navbar/sidenav.vue'
-
+import bottomNav from '@/layout/navbar/bottomNav.vue'
 export default defineComponent({
 	name: 'LayoutVertical',
 	components: {
 		sidenav,
+		bottomNav,
 	},
 	setup() {
 		const isCollapsed = ref(true)
@@ -26,10 +28,24 @@ export default defineComponent({
 			isCollapsed.value = value
 		}
 
+		const isMobile = ref(window.innerWidth <= 768)
+
+		const handleResize = () => {
+			isMobile.value = window.innerWidth <= 768
+		}
+
+		onMounted(() => {
+			window.addEventListener('resize', handleResize)
+		})
+
+		onUnmounted(() => {
+			window.removeEventListener('resize', handleResize)
+		})
 		return {
 			isCollapsed,
 			toggleCollapse,
 			updateCollapse,
+			isMobile,
 		}
 	},
 })
@@ -45,7 +61,8 @@ export default defineComponent({
 }
 @media (max-width: 768px) {
 	.main-content {
-		margin-left: 70px;
+		margin-left: 0px;
+		margin-bottom: 100px;
 	}
 }
 </style>

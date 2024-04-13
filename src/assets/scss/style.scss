@@ -97,11 +97,6 @@ a{
   text-align: center;
 }
 
-.app-container {
-  display: flex;
-  width: 100%;
-}
-
 .sidenav {
   width: 250px; 
   transition: width 0.3s ease;
@@ -206,11 +201,26 @@ a{
     opacity: 0;
     visibility: hidden;
     padding: 10px 15px;
-
+    width: 0;
+      
+    
+   
     &.active {
       max-height: 500px;
       opacity: 1;
       visibility: visible;
+
+      width: 100%;
+      max-width: 500px;
+        @media (min-width: 631px) and (max-width: 768px) {
+          width: 420px;
+        }
+      
+        @media (max-width: 630px) {
+          position: static;
+          width: 270px;
+          padding: 10px 5px;
+        }
     }
 
     .dropdown-header {
@@ -219,6 +229,20 @@ a{
       align-items: center;
 
       font-size: 14px;
+
+      &.dropdown-playlist {
+        @media (max-width: 630px) {
+            display: block;
+
+            .popularity{
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 10px;
+              width: 270px;
+            }
+          }
+      }
     }
 
     .popularity {
@@ -246,6 +270,8 @@ a{
       padding: 5px;
       max-height: 217px;
       overflow: auto;
+      width: 260px;
+
       .track {
         display: flex;
         justify-content: space-between;
