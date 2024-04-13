@@ -32,7 +32,7 @@ Essas configurações são essenciais para integrar sua aplicação com a API do
 -   Criar uma nova playlist;
 -   Exibir os dados do usuário.
 
-## Metas e Objetivos
+## Metas
 
 -   [+] Seguimentação de commits
 -   [+] Lint
