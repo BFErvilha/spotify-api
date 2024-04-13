@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import store from '@/store'
 
 const routes: Array<RouteRecordRaw> = [
 	{
@@ -16,13 +17,13 @@ const routes: Array<RouteRecordRaw> = [
 	{
 		path: '/home',
 		name: 'home',
-		meta: { layout: 'vertical', menu: 'home' },
+		meta: { requiresAuth: true, layout: 'vertical', menu: 'home' },
 		component: () => import(/* webpackChunkName: "home" */ '../views/Home.vue'),
 	},
 	{
 		path: '/artists',
 		component: () => import(/* webpackChunkName: "artists-root" */ '@/views/Root.vue'),
-		meta: { layout: 'vertical' },
+		meta: { requiresAuth: true, layout: 'vertical' },
 		children: [
 			{
 				path: '',
@@ -41,7 +42,7 @@ const routes: Array<RouteRecordRaw> = [
 	{
 		path: '/playlists',
 		component: () => import(/* webpackChunkName: "artists-root" */ '@/views/Root.vue'),
-		meta: { layout: 'vertical' },
+		meta: { requiresAuth: true, layout: 'vertical' },
 		children: [
 			{
 				path: '',
@@ -54,7 +55,7 @@ const routes: Array<RouteRecordRaw> = [
 	{
 		path: '/profile',
 		name: 'profile',
-		meta: { layout: 'vertical', menu: 'profile' },
+		meta: { requiresAuth: true, layout: 'vertical', menu: 'profile' },
 		component: () => import(/* webpackChunkName: "home" */ '../views/profile.vue'),
 	},
 ]
@@ -63,5 +64,33 @@ const router = createRouter({
 	history: createWebHistory(process.env.BASE_URL),
 	routes,
 })
+
+router.beforeEach(async (to, from, next) => {
+	const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+	if (requiresAuth) {
+		let token = store.getters['spotify/accessToken']
+		if (!token) {
+			token = localStorage.getItem('tokenSpotify')
+		}
+		if (!token) {
+			next('/')
+		} else {
+			next()
+		}
+	} else {
+		next()
+	}
+})
+
+// router.afterEach((to, from) => {
+// 	Sentry.captureEvent({
+// 		message: `Navegação de ${from.path} para ${to.path}`,
+// 		level: 'info',
+// 		extra: {
+// 			to: to.path,
+// 			from: from.path,
+// 		},
+// 	})
+// })
 
 export default router

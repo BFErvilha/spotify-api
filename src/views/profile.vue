@@ -1,7 +1,7 @@
 <template>
 	<div class="container">
 		<div class="col-md-12 profile">
-			<img :src="userData.images[1].url" :alt="userData.display_name" />
+			<img :src="userData.images?.[1]?.url" :alt="userData.display_name" />
 			<h2>{{ userData.display_name }}</h2>
 
 			<button class="btn btn-primary" @click="logout">Sair</button>
@@ -21,11 +21,6 @@ export default defineComponent({
 		const router = useRouter()
 		const userData = ref(store.getters['spotify/userData'] || { images: [{ url: '' }], display_name: '' })
 
-		const logout = () => {
-			store.dispatch('spotify/logout')
-			router.push({ name: 'login' })
-		}
-
 		watchEffect(() => {
 			if (!store.getters['spotify/userData']) {
 				store.dispatch('spotify/getUser').then(() => {
@@ -34,6 +29,10 @@ export default defineComponent({
 			}
 		})
 
+		const logout = () => {
+			store.dispatch('spotify/logout')
+			router.push({ name: 'login' })
+		}
 		return { userData, logout }
 	},
 })

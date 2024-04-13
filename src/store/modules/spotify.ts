@@ -65,11 +65,11 @@ export const spotify: Module<SpotifyState, RootState> = {
 		},
 
 		logout({ commit }) {
+			localStorage.removeItem('tokenSpotify')
+			localStorage.removeItem('tokenRefreshSpotify')
+			localStorage.removeItem('spotify_code_verifier')
+			localStorage.removeItem('spotify_auth_state')
 			commit('RESET_USER_STATE')
-
-			localStorage.removeItem('accessToken')
-			localStorage.removeItem('refreshToken')
-			localStorage.removeItem('spotifyUser')
 		},
 	},
 }

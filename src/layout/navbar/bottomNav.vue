@@ -8,7 +8,7 @@
 						<span>{{ item.title }} </span>
 					</router-link>
 				</li>
-				<li v-if="!isPwa">
+				<li v-if="!pwa">
 					<div class="nav-link" @click="installPWA">
 						<menu-icons icon="pwa" />
 						<span> PWA </span>
@@ -66,6 +66,7 @@ export default defineComponent({
 		const isPwa = () => {
 			return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true
 		}
+		const pwa = isPwa()
 
 		onMounted(() => {
 			window.addEventListener('resize', handleResize)
@@ -87,7 +88,7 @@ export default defineComponent({
 			actualRoute,
 			isMobile,
 			installPWA,
-			isPwa,
+			pwa,
 		}
 	},
 })

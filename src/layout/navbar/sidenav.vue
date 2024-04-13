@@ -13,7 +13,7 @@
 					</router-link>
 				</li>
 			</ul>
-			<div v-if="!isPwa" class="sidebar-footer active" @click="installPWA">
+			<div v-if="!pwa" class="sidebar-footer active" @click="installPWA">
 				<menu-icons icon="pwa" :active="true" />
 				<span> Instalar PWA </span>
 			</div>
@@ -89,16 +89,18 @@ export default defineComponent({
 		onBeforeUnmount(() => {
 			window.removeEventListener('beforeinstallprompt', captureInstallEvent)
 		})
+
 		const isPwa = () => {
 			return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true
 		}
+		const pwa = isPwa()
 		return {
 			menu,
 			toggle,
 			actualRoute,
 			showInstallButton,
 			installPWA,
-			isPwa,
+			pwa,
 		}
 	},
 })
