@@ -8,7 +8,7 @@ const router = createRouter({
 })
 
 describe('DetailsHeader.vue', () => {
-	const mountComponentWithRouter = options => {
+	const montarComponenteComRouter = options => {
 		return mount(DetailsHeader, {
 			global: {
 				plugins: [router],
@@ -20,18 +20,18 @@ describe('DetailsHeader.vue', () => {
 		})
 	}
 
-	it('renders props.name when passed', async () => {
+	it('renderiza props.name quando passado', async () => {
 		const name = 'Nome do Artista Teste'
-		const wrapper = mountComponentWithRouter({
+		const wrapper = montarComponenteComRouter({
 			props: { name, image: 'test-image.jpg' },
 		})
 
 		expect(wrapper.text()).toMatch(name)
 	}, 10000)
 
-	it('renders props.image as src for the image', async () => {
+	it('renderiza props.image como src para a imagem', async () => {
 		const image = 'test-image.jpg'
-		const wrapper = mountComponentWithRouter({
+		const wrapper = montarComponenteComRouter({
 			props: { name: 'Nome do Artista Teste', image },
 		})
 

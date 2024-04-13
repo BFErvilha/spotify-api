@@ -2,29 +2,34 @@ import { mount } from '@vue/test-utils'
 import Modal from '@/components/Modal.vue'
 
 describe('Modal.vue', () => {
-	it('is visible when mounted', () => {
+	it('está visível quando montado', () => {
 		const wrapper = mount(Modal)
 		expect(wrapper.vm.visible).toBe(true)
 		expect(wrapper.find('.modal-backdrop').exists()).toBe(true)
 	})
 
-	it('emits close event when close button is clicked', async () => {
+	it('emite evento de fechamento quando o botão de fechar é clicado', async () => {
 		const wrapper = mount(Modal)
 		await wrapper.find('.close-button').trigger('click')
 		expect(wrapper.emitted()).toHaveProperty('close')
 		expect(wrapper.vm.visible).toBe(false)
 	})
 
-	it('emits request event with playlist name when create button is clicked', async () => {
+	it('emite evento de solicitação com o nome da playlist quando o botão de criar é clicado', async () => {
 		const wrapper = mount(Modal)
-		const playlistName = 'My New Playlist'
+		const playlistName = 'Minha Nova Playlist'
 		await wrapper.setData({ playlistName })
 		await wrapper.find('.create-button').trigger('click')
 		expect(wrapper.emitted()).toHaveProperty('request')
-		expect(wrapper.emitted('request')![0]).toEqual([playlistName])
+		const requestEvents = wrapper.emitted('request')
+		if (requestEvents) {
+			expect(requestEvents[0]).toEqual([playlistName])
+		} else {
+			fail('Evento "request" não foi emitido')
+		}
 	})
 
-	it('closes the modal when modal backdrop is clicked', async () => {
+	it('fecha o modal quando o fundo do modal é clicado', async () => {
 		const wrapper = mount(Modal)
 		await wrapper.find('.modal-backdrop').trigger('click')
 		expect(wrapper.vm.visible).toBe(false)

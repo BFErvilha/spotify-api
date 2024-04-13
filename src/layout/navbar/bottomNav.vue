@@ -8,7 +8,7 @@
 						<span>{{ item.title }} </span>
 					</router-link>
 				</li>
-				<li>
+				<li v-if="!isPwa">
 					<div class="nav-link" @click="installPWA">
 						<menu-icons icon="pwa" />
 						<span> PWA </span>
@@ -39,14 +39,16 @@ export default defineComponent({
 		const route = useRoute()
 		const isMobile = ref(window.innerWidth <= 768)
 		const deferredPrompt = ref<BeforeInstallPromptEvent | null>(null)
-		const showInstallButton = ref(false)
 
 		const handleResize = () => {
 			isMobile.value = window.innerWidth <= 768
 		}
-		const captureInstallEvent = (e: BeforeInstallPromptEvent) => {
-			e.preventDefault()
-			deferredPrompt.value = e
+		const captureInstallEvent = (event: BeforeInstallPromptEvent) => {
+			if (event instanceof CustomEvent && event.type === 'beforeinstallprompt') {
+				event.preventDefault()
+				const beforeInstallPromptEvent = event as BeforeInstallPromptEvent
+				deferredPrompt.value = beforeInstallPromptEvent
+			}
 		}
 		const installPWA = async () => {
 			if (deferredPrompt.value) {
@@ -61,13 +63,17 @@ export default defineComponent({
 			}
 		}
 
+		const isPwa = () => {
+			return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true
+		}
+
 		onMounted(() => {
 			window.addEventListener('resize', handleResize)
-			window.addEventListener('beforeinstallprompt', captureInstallEvent as any)
+			window.addEventListener('beforeinstallprompt', captureInstallEvent)
 		})
 
 		onBeforeUnmount(() => {
-			window.removeEventListener('beforeinstallprompt', captureInstallEvent as any)
+			window.removeEventListener('beforeinstallprompt', captureInstallEvent)
 		})
 
 		onUnmounted(() => {
@@ -81,6 +87,7 @@ export default defineComponent({
 			actualRoute,
 			isMobile,
 			installPWA,
+			isPwa,
 		}
 	},
 })

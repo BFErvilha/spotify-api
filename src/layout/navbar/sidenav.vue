@@ -13,8 +13,8 @@
 					</router-link>
 				</li>
 			</ul>
-			<div class="sidebar-footer" @click="installPWA">
-				<menu-icons icon="pwa" :class="{ active: true }" />
+			<div v-if="!isPwa" class="sidebar-footer active" @click="installPWA">
+				<menu-icons icon="pwa" :active="true" />
 				<span> Instalar PWA </span>
 			</div>
 		</div>
@@ -26,6 +26,11 @@ import { defineComponent, computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute } from 'vue-router'
 import { menu } from './menuList'
 import menuIcons from '@/components/spotify/icons.vue'
+
+interface BeforeInstallPromptEvent extends Event {
+	prompt: () => Promise<void>
+	userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>
+}
 
 export default defineComponent({
 	name: 'SideNav',
@@ -53,12 +58,9 @@ export default defineComponent({
 			return route.meta.menu
 		})
 
-		const captureInstallEvent = (e: BeforeInstallPromptEvent) => {
-			e.preventDefault()
-			deferredPrompt.value = e
-		}
 		const installPWA = async () => {
 			if (deferredPrompt.value) {
+				deferredPrompt.value.preventDefault()
 				await deferredPrompt.value.prompt()
 				const { outcome } = await deferredPrompt.value.userChoice
 				if (outcome === 'accepted') {
@@ -67,23 +69,36 @@ export default defineComponent({
 					console.log('Usuário recusou a instalação do PWA')
 				}
 				deferredPrompt.value = null
+				showInstallButton.value = false
+			}
+		}
+
+		const captureInstallEvent = (event: BeforeInstallPromptEvent) => {
+			if (event instanceof CustomEvent && event.type === 'beforeinstallprompt') {
+				event.preventDefault()
+				const beforeInstallPromptEvent = event as BeforeInstallPromptEvent
+				deferredPrompt.value = beforeInstallPromptEvent
+				showInstallButton.value = true
 			}
 		}
 
 		onMounted(() => {
-			window.addEventListener('beforeinstallprompt', captureInstallEvent as any)
+			window.addEventListener('beforeinstallprompt', captureInstallEvent)
 		})
 
 		onBeforeUnmount(() => {
-			window.removeEventListener('beforeinstallprompt', captureInstallEvent as any)
+			window.removeEventListener('beforeinstallprompt', captureInstallEvent)
 		})
-
+		const isPwa = () => {
+			return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true
+		}
 		return {
 			menu,
 			toggle,
 			actualRoute,
 			showInstallButton,
 			installPWA,
+			isPwa,
 		}
 	},
 })

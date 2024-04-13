@@ -13,7 +13,7 @@ const router = createRouter({
 })
 
 describe('ArtistCard.vue', () => {
-	const mountComponent = options => {
+	const montarComponente = options => {
 		return mount(ArtistCard, {
 			global: {
 				plugins: [router],
@@ -22,27 +22,27 @@ describe('ArtistCard.vue', () => {
 		})
 	}
 
-	it('renders a router-link for artists with correct props', async () => {
-		const artist = { id: '1', name: 'Test Artist', images: [{ url: 'test-artist-image.jpg' }] }
-		const wrapper = mountComponent({
-			props: { artist, view: 'artists' },
+	it('renderiza um router-link para artistas com as props corretas', async () => {
+		const artista = { id: '1', name: 'Artista Teste', images: [{ url: 'imagem-artista-teste.jpg' }] }
+		const wrapper = montarComponente({
+			props: { artist: artista, view: 'artists' },
 		})
 
 		const routerLink = wrapper.findComponent({ name: 'RouterLink' })
 		expect(routerLink.exists()).toBe(true)
 		expect(routerLink.props('to')).toBe('/artists/1')
-		expect(wrapper.text()).toContain('Test Artist')
-		expect(wrapper.find('img').attributes('src')).toBe('test-artist-image.jpg')
+		expect(wrapper.text()).toContain('Artista Teste')
+		expect(wrapper.find('img').attributes('src')).toBe('imagem-artista-teste.jpg')
 	})
 
-	it('renders album information with formatted date', () => {
-		const album = { id: '2', name: 'Test Album', images: [{ url: 'test-album-image.jpg' }], release_date: '2020-01-01' }
-		const wrapper = mountComponent({
+	it('renderiza informações do álbum com data formatada', () => {
+		const album = { id: '2', name: 'Álbum Teste', images: [{ url: 'imagem-album-teste.jpg' }], release_date: '2020-01-01' }
+		const wrapper = montarComponente({
 			props: { album, view: 'albums' },
 		})
 
-		expect(wrapper.text()).toContain('Test Album')
+		expect(wrapper.text()).toContain('Álbum Teste')
 		expect(wrapper.find('.date').text()).toBe(moment('2020-01-01').format('DD/MM/YYYY'))
-		expect(wrapper.find('img').attributes('src')).toBe('test-album-image.jpg')
+		expect(wrapper.find('img').attributes('src')).toBe('imagem-album-teste.jpg')
 	})
 })
